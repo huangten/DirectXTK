@@ -97,10 +97,10 @@ namespace
         }
 
         // Gets or lazily creates the specified pixel shader.
-        ID3D11PixelShader* GetPixelShader(int shaderIndex)
+        ID3D11PixelShader* GetPixelShader(unsigned int shaderIndex)
         {
-            assert(shaderIndex >= 0 && shaderIndex < DualPostProcess::Effect_Max);
-            _Analysis_assume_(shaderIndex >= 0 && shaderIndex < DualPostProcess::Effect_Max);
+            assert(shaderIndex < DualPostProcess::Effect_Max);
+            _Analysis_assume_(shaderIndex < DualPostProcess::Effect_Max);
 
             return DemandCreate(mPixelShaders[shaderIndex], mMutex, [&](ID3D11PixelShader** pResult) -> HRESULT
             {
@@ -130,7 +130,7 @@ public:
 
     void Process(_In_ ID3D11DeviceContext* deviceContext, std::function<void __cdecl()>& setCustomState);
 
-    void SetDirtyFlag() { mDirtyFlags = INT_MAX; }
+    void SetDirtyFlag() noexcept { mDirtyFlags = INT_MAX; }
 
     // Fields.
     PostProcessConstants                    constants;
@@ -301,7 +301,7 @@ void DualPostProcess::Process(_In_ ID3D11DeviceContext* deviceContext, _In_opt_ 
 // Shader control.
 void DualPostProcess::SetEffect(Effect fx)
 {
-    if (fx < 0 || fx >= Effect_Max)
+    if (fx >= Effect_Max)
         throw std::out_of_range("Effect not defined");
 
     pImpl->fx = fx;

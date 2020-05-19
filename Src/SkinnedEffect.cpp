@@ -62,7 +62,7 @@ public:
 
     EffectLights lights;
 
-    int GetCurrentShaderPermutation() const;
+    int GetCurrentShaderPermutation() const noexcept;
 
     void Apply(_In_ ID3D11DeviceContext* deviceContext);
 };
@@ -266,7 +266,7 @@ const int EffectBase<SkinnedEffectTraits>::PixelShaderIndices[] =
 
 // Global pool of per-device SkinnedEffect resources.
 template<>
-SharedResourcePool<ID3D11Device*, EffectBase<SkinnedEffectTraits>::DeviceResources> EffectBase<SkinnedEffectTraits>::deviceResourcesPool;
+SharedResourcePool<ID3D11Device*, EffectBase<SkinnedEffectTraits>::DeviceResources> EffectBase<SkinnedEffectTraits>::deviceResourcesPool = {};
 
 
 // Constructor.
@@ -292,7 +292,7 @@ SkinnedEffect::Impl::Impl(_In_ ID3D11Device* device)
 }
 
 
-int SkinnedEffect::Impl::GetCurrentShaderPermutation() const
+int SkinnedEffect::Impl::GetCurrentShaderPermutation() const noexcept
 {
     int permutation = 0;
 

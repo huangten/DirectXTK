@@ -97,7 +97,8 @@ namespace
             device->CreateBuffer(&desc, nullptr, pBuffer)
         );
 
-        _Analysis_assume_(*pBuffer != 0);
+        assert(pBuffer != nullptr && *pBuffer != nullptr);
+        _Analysis_assume_(pBuffer != nullptr && *pBuffer != nullptr);
 
         SetDebugObjectName(*pBuffer, "DirectXTK:PrimitiveBatch");
     }
@@ -220,7 +221,7 @@ void PrimitiveBatchBase::Impl::End()
 namespace
 {
     // Can we combine adjacent primitives using this topology into a single draw call?
-    bool CanBatchPrimitives(D3D11_PRIMITIVE_TOPOLOGY topology)
+    bool CanBatchPrimitives(D3D11_PRIMITIVE_TOPOLOGY topology) noexcept
     {
         switch (topology)
         {
@@ -397,7 +398,10 @@ void PrimitiveBatchBase::Impl::FlushBatch()
         // Draw indexed geometry.
         mDeviceContext->Unmap(mIndexBuffer.Get(), 0);
 
-        mDeviceContext->DrawIndexed(static_cast<UINT>(mCurrentIndex - mBaseIndex), static_cast<UINT>(mBaseIndex), static_cast<UINT>(mBaseVertex));
+        mDeviceContext->DrawIndexed(
+            static_cast<UINT>(mCurrentIndex - mBaseIndex),
+            static_cast<UINT>(mBaseIndex),
+            static_cast<INT>(mBaseVertex));
     }
     else
     {

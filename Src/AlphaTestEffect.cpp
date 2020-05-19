@@ -50,7 +50,7 @@ public:
 
     EffectColor color;
 
-    int GetCurrentShaderPermutation() const;
+    int GetCurrentShaderPermutation() const noexcept;
 
     void Apply(_In_ ID3D11DeviceContext* deviceContext);
 };
@@ -135,7 +135,7 @@ const int EffectBase<AlphaTestEffectTraits>::PixelShaderIndices[] =
 
 // Global pool of per-device AlphaTestEffect resources.
 template<>
-SharedResourcePool<ID3D11Device*, EffectBase<AlphaTestEffectTraits>::DeviceResources> EffectBase<AlphaTestEffectTraits>::deviceResourcesPool;
+SharedResourcePool<ID3D11Device*, EffectBase<AlphaTestEffectTraits>::DeviceResources> EffectBase<AlphaTestEffectTraits>::deviceResourcesPool = {};
 
 
 // Constructor.
@@ -152,7 +152,7 @@ AlphaTestEffect::Impl::Impl(_In_ ID3D11Device* device)
 }
 
 
-int AlphaTestEffect::Impl::GetCurrentShaderPermutation() const
+int AlphaTestEffect::Impl::GetCurrentShaderPermutation() const noexcept
 {
     int permutation = 0;
 

@@ -62,7 +62,7 @@ public:
 
     EffectLights lights;
 
-    int GetCurrentShaderPermutation() const;
+    int GetCurrentShaderPermutation() const noexcept;
 
     void Apply(_In_ ID3D11DeviceContext* deviceContext);
 };
@@ -379,7 +379,7 @@ const int EffectBase<BasicEffectTraits>::PixelShaderIndices[] =
 
 // Global pool of per-device BasicEffect resources.
 template<>
-SharedResourcePool<ID3D11Device*, EffectBase<BasicEffectTraits>::DeviceResources> EffectBase<BasicEffectTraits>::deviceResourcesPool;
+SharedResourcePool<ID3D11Device*, EffectBase<BasicEffectTraits>::DeviceResources> EffectBase<BasicEffectTraits>::deviceResourcesPool = {};
 
 
 // Constructor.
@@ -400,7 +400,7 @@ BasicEffect::Impl::Impl(_In_ ID3D11Device* device)
 }
 
 
-int BasicEffect::Impl::GetCurrentShaderPermutation() const
+int BasicEffect::Impl::GetCurrentShaderPermutation() const noexcept
 {
     int permutation = 0;
 
